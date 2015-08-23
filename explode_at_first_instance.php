@@ -6,7 +6,7 @@ function explode_at_first_instance($str, $delimiter) {
     if (is_array($str)) {
         $output = "The first argument must be a string";
     } else if (is_null($str) || strlen($delimiter) == 0) {
-        $output = "The needle must not be null nor empty";
+        $output = "The delimiter must not be null nor empty";
     } else if ($pos === false) {
         $output = array($str);
     } else {
