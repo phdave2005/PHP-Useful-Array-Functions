@@ -21,7 +21,7 @@ function multi_delimiter_explode($str, $delimiterArray) {
 		
         $substituteStr = str_replace($delimiterArray, $explodeDelimiter, $str);
 		
-        $output = explode($explodeDelimiter, $substituteStr);;
+        $output = explode($explodeDelimiter, $substituteStr);
 		
     }
     
