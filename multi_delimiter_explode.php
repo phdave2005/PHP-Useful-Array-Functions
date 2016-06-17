@@ -7,9 +7,9 @@ function multi_delimiter_explode($str, $delimiterArray) {
     $strLength = strlen($str);
 	
     if (is_array($str) || is_null($str) || $strLength == 0) {
-        $output = "The first argument must be a string of length greater than zero";
+        throw new Exception("The first argument must be a string of length greater than zero");
     } else if (!is_array($delimiterArray) || $arrayCount == 0) {
-        $output = "The second argument must be an array with at least one member";
+        throw new Exception("The second argument must be an array with at least one member");
     } else {
 	  
         $explodeDelimiter = '0';
@@ -21,10 +21,8 @@ function multi_delimiter_explode($str, $delimiterArray) {
 		
         $substituteStr = str_replace($delimiterArray, $explodeDelimiter, $str);
 		
-        $output = explode($explodeDelimiter, $substituteStr);
+        return explode($explodeDelimiter, $substituteStr);
 		
     }
-    
-    return $output;
     
 }
