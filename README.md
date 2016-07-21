@@ -6,3 +6,5 @@ The first function created for this purpose is a function which explodes at posi
 The functions explode_at_first_instance() and explode_at_last_instance() are similar. Both functions explode a string via a specific delimiter. However, the former function will explode only at the first instance of the delimiter (regardless of whether or not the delimiter is present elsewhere in the string), whereas the latter function does the same but only at the last instance of the delimiter in the string. Both functions take 2 arguments, a string (could also be a number but numbers will be forced to be strings) and a delimiter.
 
 The function multi_delimiter_explode() will explode a string at any location in a string where there is a match for one or more delimiters. The function takes 2 arguments (a string, which could also be a number that will be forced to be a string, and an array of delimiters), and the second array must not be associative. The delimiters will have priority from left to right acrosss the string.
+
+The class base_n_sort requires 3 argument: the array of values, the base (e.g. 10) as an integer, and the sort type ("asc" or "desc").
