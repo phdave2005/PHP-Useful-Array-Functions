@@ -5,7 +5,7 @@ class base_n_sort {
 	public function __construct($sort_type) {
 		if ($sort_type !== 'asc' && $sort_type !== 'desc') $sort_type = 'asc';
 		$this->for_loop_group = "group_" . $sort_type;
-		$this->direction = $sort_type;
+		$this->for_loop_sort = "sort_" . $sort_type;
     }
 
 	function group_asc($tempArray, $keyCount, $minusOne, $thisLength, $keysArray) {
@@ -86,8 +86,8 @@ class base_n_sort {
 		for($i = 0; $i < $keyCount; $i++) {
 			$returnArray[(string)$keysArray[$i]] = $masterArray[(string)$keysArray[$i]];
 		}
-		$returnArray = $this->sortMinis($returnArray, $base, $this->direction);
-		return $returnArray;
+		
+		return $this->sortMinis($returnArray, $base);
 	}
 
     function convertToDecimal($val, $base) {
@@ -99,69 +99,79 @@ class base_n_sort {
 	    }
 	    return $convertedVal;	
     }
+    
+    function sort_asc($buildArray, $val, $base, $thisCount) {
+    	$inserted = false;
+    	for($j = 1; $j < $thisCount; $j++) {
+			$buildCount = count($buildArray);
+			$minusOne = $buildCount - 1;
+			$tempArray = array();
+			for($k = 0; $k < $buildCount; $k++) {
+				if (!$inserted) {
+					$convertedVal = $this->convertToDecimal($val[$j], $base);
+					$convertedBuild = $this->convertToDecimal($buildArray[$k], $base);
+					if ($k !== $minusOne) {
+						if ($convertedVal <= $convertedBuild) {
+							$tempArray[] = $val[$j];
+							$inserted = true;
+						}
+						$tempArray[] = $buildArray[$k];
+					} else {
+						if ($convertedVal <= $convertedBuild) {
+							$tempArray[] = $val[$j];
+							$tempArray[] = $buildArray[$k];
+						} else {
+					    	$tempArray[] = $buildArray[$k];
+							$tempArray[] = $val[$j];	
+						}
+					}
+				} else {
+					$tempArray[] = $buildArray[$k];	
+				}
+		    }
+		    $buildArray = $tempArray;
+		}
+    	return $buildArray;
+    }
+    
+    function sort_desc($buildArray, $val, $base, $thisCount) {
+    	$inserted = false;
+    	for($j = 1; $j < $thisCount; $j++) {
+			$buildCount = count($buildArray);
+			$minusOne = $buildCount - 1;
+			$tempArray = array();
+			for($k = 0; $k < $buildCount; $k++) {
+				if (!$inserted) {
+					$convertedVal = $this->convertToDecimal($val[$j], $base);
+					$convertedBuild = $this->convertToDecimal($buildArray[$k], $base);
+					if ($k !== $minusOne) {
+						if ($convertedVal >= $convertedBuild) {
+							$tempArray[] = $val[$j];
+							$inserted = true;
+						}
+						$tempArray[] = $buildArray[$k];
+					} else {
+						if ($convertedVal >= $convertedBuild) {
+							$tempArray[] = $val[$j];
+							$tempArray[] = $buildArray[$k];
+						} else {
+					    	$tempArray[] = $buildArray[$k];
+							$tempArray[] = $val[$j];	
+						}
+					}
+				} else {
+					$tempArray[] = $buildArray[$k];	
+				}
+		    }
+		    $buildArray = $tempArray;
+		}
+    	return $buildArray;
+    }
 
-    function sortMinis($masterArray, $base, $direction) {
-	    $count = count($masterArray);
+    function sortMinis($masterArray, $base) {
 	    $sortedArray = array();
 	    foreach($masterArray as $key=>$val) {
-		    $thisCount = count($val);
-		    $buildArray = array($val[0]);//the sorted array
-		    $inserted = false;
-		    for($j = 1; $j < $thisCount; $j++) {
-			    $buildCount = count($buildArray);
-			    $minusOne = $buildCount - 1;
-			    $tempArray = array();
-			    if ($direction === 'asc') {
-				    for($k = 0; $k < $buildCount; $k++) {
-					    if (!$inserted) {
-						    $convertedVal = $this->convertToDecimal($val[$j], $base);
-						    $convertedBuild = $this->convertToDecimal($buildArray[$k], $base);
-						    if ($k !== $minusOne) {
-							    if ($convertedVal <= $convertedBuild) {
-								    $tempArray[] = $val[$j];
-								    $inserted = true;
-							    }
-							    $tempArray[] = $buildArray[$k];
-						    } else {
-							    if ($convertedVal <= $convertedBuild) {
-								    $tempArray[] = $val[$j];
-								    $tempArray[] = $buildArray[$k];
-							    } else {
-								    $tempArray[] = $buildArray[$k];
-								    $tempArray[] = $val[$j];	
-							    }
-						    }
-					    } else {
-						    $tempArray[] = $buildArray[$k];	
-					    }
-				    }
-			    } else {
-				    for($k = 0; $k < $buildCount; $k++) {
-					    if (!$inserted) {
-						    if ($k !== $minusOne) {
-							    if ($val[$j] >= $buildArray[$k]) {
-								    $tempArray[] = $val[$j];
-								    $inserted = true;
-							    }
-							    $tempArray[] = $buildArray[$k];
-						    } else {
-							    if ($val[$j] >= $buildArray[$k]) {
-								    $tempArray[] = $val[$j];
-								    $tempArray[] = $buildArray[$k];
-							    } else {
-								    $tempArray[] = $buildArray[$k];
-								    $tempArray[] = $val[$j];	
-							    }
-						    }
-					    } else {
-						    $tempArray[] = $buildArray[$k];	
-					    }
-				    }
-			    }
-			    $buildArray = $tempArray;
-			    $inserted = false;
-		    }
-		    $sortedArray = array_merge($sortedArray, $buildArray);
+		    $sortedArray = array_merge($sortedArray, $this->{$this->for_loop_sort}(array($val[0]), $val, $base, count($val)));
 	    }
 	    return $sortedArray;
     }
