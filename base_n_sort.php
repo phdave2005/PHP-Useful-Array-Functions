@@ -73,11 +73,7 @@ class base_n_sort {
 			$mapped = array_map(function ($el) use($convert_decimal_to_base_n, $base) {
 				return $convert_decimal_to_base_n($el, $base);	
 			}, $mapped);
-			
-			print_r($orig);
-			echo "<br>";
-			print_r($mapped);
-			die();
+						
 		} else {
 			echo "Cannot be mapped";
 			exit;
