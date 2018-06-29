@@ -80,7 +80,7 @@ class base_n_sort {
 			}, $mapped);
 			
 		} else {
-			echo $invalid;
+			throw new Exception($invalid);
 			exit;
 		}
 				
