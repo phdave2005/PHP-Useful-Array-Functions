@@ -1,14 +1,12 @@
 <?php
 
 class base_n_sort {
-
 	public function __construct($sort_type) {
 		if ($sort_type !== 'asc' && $sort_type !== 'desc') $sort_type = 'asc';
 		$this->for_loop_group = "group_" . $sort_type;
 		$this->for_loop_sort = "sort_" . $sort_type;
     }
-
-	function group_asc($tempArray, $keyCount, $minusOne, $thisLength, $keysArray) {
+	private function group_asc($tempArray, $keyCount, $minusOne, $thisLength, $keysArray) {
 		$inserted = false;
 		for($j = 0; $j < $keyCount; $j++) {
 			if (!$inserted) {
@@ -34,7 +32,7 @@ class base_n_sort {
 		return $tempArray;
 	}
 	
-	function group_desc($tempArray, $keyCount, $minusOne, $thisLength, $keysArray) {
+	private function group_desc($tempArray, $keyCount, $minusOne, $thisLength, $keysArray) {
 		$inserted = false;
 		for($j = 0; $j < $keyCount; $j++) {
 			if (!$inserted) {
@@ -59,8 +57,7 @@ class base_n_sort {
 		}
 		return $tempArray;
 	}
-
-	function sort($arr, $base) {
+	public function sort($arr, $base) {
 		$count = count($arr);
 		$masterArray = $keysArray = array();
 		$keyCount = 0;
@@ -89,8 +86,7 @@ class base_n_sort {
 		
 		return $this->sortMinis($returnArray, $base);
 	}
-
-    function convertToDecimal($val, $base) {
+    private function convertToDecimal($val, $base) {
 	    $valLength = strlen($val);
 	    $revVal = strrev((string)$val);
 	    $convertedVal = 0;
@@ -100,7 +96,7 @@ class base_n_sort {
 	    return $convertedVal;	
     }
     
-    function sort_asc($buildArray, $val, $base, $thisCount) {
+    private function sort_asc($buildArray, $val, $base, $thisCount) {
     	$inserted = false;
     	for($j = 1; $j < $thisCount; $j++) {
 			$buildCount = count($buildArray);
@@ -134,7 +130,7 @@ class base_n_sort {
     	return $buildArray;
     }
     
-    function sort_desc($buildArray, $val, $base, $thisCount) {
+    private function sort_desc($buildArray, $val, $base, $thisCount) {
     	$inserted = false;
     	for($j = 1; $j < $thisCount; $j++) {
 			$buildCount = count($buildArray);
@@ -167,8 +163,7 @@ class base_n_sort {
 		}
     	return $buildArray;
     }
-
-    function sortMinis($masterArray, $base) {
+    private function sortMinis($masterArray, $base) {
 	    $sortedArray = array();
 	    foreach($masterArray as $key=>$val) {
 		    $sortedArray = array_merge($sortedArray, $this->{$this->for_loop_sort}(array($val[0]), $val, $base, count($val)));
