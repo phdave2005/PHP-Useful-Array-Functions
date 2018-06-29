@@ -6,25 +6,31 @@ class base_n_sort {
 		$this->sort_function = ($sort_type === 'asc') ? 'asort' : 'rsort';
     }
 	
-	private function is_valid_input($arr, $base) {
-		$is_valid = true;
+	private function is_invalid_input($arr, $base) {
+		$invalid = false;
 		
-		foreach($arr as $a) {
-			$split = str_split((string)$a);
-			foreach($split as $s) {
-				if ((int)$s >= $base) {
-					$is_valid = false;
-					break 2;
+		if ($base <= 0) {
+			$invalid = 'Bases must be integers greater than zero';	
+		} else {		
+			foreach($arr as $a) {
+				$split = str_split((string)$a);
+				foreach($split as $s) {
+					if ((int)$s >= $base) {
+						$invalid = 'Data set cannot be mapped';
+						break 2;
+					}
 				}
 			}
 		}
 		
-		return $is_valid;
+		return $invalid;
 	}
 	
 	public function sort($arr, $base) {
 		
-		if ($this->is_valid_input($arr, $base)) {
+		$invalid = $this->is_invalid_input($arr, $base);
+		
+		if (!$invalid) {
 		
 			$convert_base_n_to_decimal = function($val, $base) {
 				$val_length = strlen($val);
@@ -68,14 +74,13 @@ class base_n_sort {
 			
 			$sort_function = $this->sort_function;
 			$sort_function($mapped);
-			$orig = $mapped;
-			
+						
 			$mapped = array_map(function ($el) use($convert_decimal_to_base_n, $base) {
 				return $convert_decimal_to_base_n($el, $base);	
 			}, $mapped);
-						
+			
 		} else {
-			echo "Cannot be mapped";
+			echo $invalid;
 			exit;
 		}
 				
