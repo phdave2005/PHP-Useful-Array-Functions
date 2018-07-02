@@ -9,14 +9,16 @@ class base_n_sort {
 	private function is_invalid_input($arr, $base) {
 		$invalid = false;
 		
-		if (!is_numeric($base) || ($base <= 0) || !ctype_digit($base)) {
-			$invalid = 'Bases must be integers greater than zero';	
+		if (!is_array($arr)) {
+			$invalid = 'The sortable instance must be of type array.';
+		} elseif (!is_numeric($base) || ($base <= 0) || !ctype_digit($base)) {
+			$invalid = 'Bases must be integers greater than zero.';
 		} else {
 			foreach($arr as $a) {
 				$split = str_split((string)$a);
 				foreach($split as $s) {
 					if ((int)$s >= $base) {
-						$invalid = 'Data set cannot be mapped';
+						$invalid = 'Data set cannot be mapped.';
 						break 2;
 					}
 				}
@@ -26,7 +28,7 @@ class base_n_sort {
 		return $invalid;
 	}
 	
-	public function sort($arr, $base = false) {
+	public function sort($arr = false, $base = false) {
 		
 		$invalid = $this->is_invalid_input($arr, $base);
 		
