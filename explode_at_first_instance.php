@@ -15,8 +15,7 @@ function explode_at_first_instance($str = false, $delimiter = false) {
         	$pre = substr($str, 0, $pos);
 		$post = substr($str, $pos + strlen($str));
 			
-		$output = [$pre, $post];
-    	
+		$output = [$pre, $post];    	
     	}
 	
     	return $output;
