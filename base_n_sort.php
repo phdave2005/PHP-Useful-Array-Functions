@@ -9,9 +9,9 @@ class base_n_sort {
 	private function is_invalid_input($arr, $base) {
 		$invalid = false;
 		
-		if ($base <= 0) {
+		if (!is_numeric($base) || ($base <= 0) || !ctype_digit($base)) {
 			$invalid = 'Bases must be integers greater than zero';	
-		} else {		
+		} else {
 			foreach($arr as $a) {
 				$split = str_split((string)$a);
 				foreach($split as $s) {
@@ -26,57 +26,21 @@ class base_n_sort {
 		return $invalid;
 	}
 	
-	public function sort($arr, $base) {
+	public function sort($arr, $base = false) {
 		
 		$invalid = $this->is_invalid_input($arr, $base);
 		
 		if (!$invalid) {
 		
-			$convert_base_n_to_decimal = function($val, $base) {
-				$val_length = strlen($val);
-				$rev_val = strrev((string)$val);
-				$converted_val = 0;
-				for($i = 0; $i < $val_length; $i++) {
-					if ((int)$rev_val[$i] > 0) {
-						$converted_val += pow($base, $i) * (int)$rev_val[$i];
-					}
-				}
-				return $converted_val;	
-			};
-			
-			$convert_decimal_to_base_n = function($val, $base) use(&$convert_decimal_to_base_n) {
-				$valLength = strlen($val);
-				$remainder = $val;
-				$converted_val = '';
-				for($i = 0; $i < $valLength; $i++) {
-					if ($remainder < $base) {
-						$converted_val .= $remainder;
-						$remainder = null;
-						break;
-					} else {
-						$floor = (int)floor($val / $base);
-						if ($floor >= $base) {
-							$floor = $convert_decimal_to_base_n($floor, $base);
-						}
-						$converted_val .= $floor;
-						$remainder = $remainder % $base;
-					}
-				}
-				
-				if (isset($remainder)) $converted_val .= $remainder;
-				
-				return (int)$converted_val;	
-			};
-			
-			$mapped = array_map(function ($el) use($convert_base_n_to_decimal, $base) {
-				return $convert_base_n_to_decimal($el, $base);	
+			$mapped = array_map(function ($el) use($base) {
+				return (int)base_convert((int)$el, $base, 10);
 			}, $arr);
 			
 			$sort_function = $this->sort_function;
 			$sort_function($mapped);
 						
-			$mapped = array_map(function ($el) use($convert_decimal_to_base_n, $base) {
-				return $convert_decimal_to_base_n($el, $base);	
+			$mapped = array_map(function ($el) use($base) {
+				return (int)base_convert((int)$el, 10, $base);
 			}, $mapped);
 			
 		} else {
@@ -85,9 +49,7 @@ class base_n_sort {
 		}
 				
 		return $mapped;
-	}
-    
+	}    
 }
-
   
 ?>
