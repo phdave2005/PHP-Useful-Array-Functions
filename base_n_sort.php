@@ -1,7 +1,7 @@
 <?php
 
 class base_n_sort {
-	public function __construct($sort_type) {
+	public function __construct($sort_type = 'asc') {
 		if ($sort_type !== 'asc' && $sort_type !== 'desc') $sort_type = 'asc';
 		$this->sort_function = ($sort_type === 'asc') ? 'asort' : 'rsort';
     }
@@ -9,9 +9,9 @@ class base_n_sort {
 	private function is_invalid_input($arr, $base) {
 		$invalid = false;
 		
-		if (!is_array($arr)) {
-			$invalid = 'The sortable instance must be of type array.';
-		} elseif (!is_numeric($base) || ($base <= 0) || !ctype_digit($base)) {
+		if (!is_array($arr) || empty($arr)) {
+			$invalid = 'The sortable instance must be a non-empty array.';
+		} elseif (!is_numeric($base) || ($base <= 0) || !ctype_digit((string)$base)) {
 			$invalid = 'Bases must be integers greater than zero.';
 		} else {
 			foreach($arr as $a) {
@@ -28,7 +28,7 @@ class base_n_sort {
 		return $invalid;
 	}
 	
-	public function sort($arr = false, $base = false) {
+	public function sort($arr = [], $base = false) {
 		
 		$invalid = $this->is_invalid_input($arr, $base);
 		
